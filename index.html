@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuizi Shqiptar</title>
+<style>
+  body { font-family: 'Poppins', sans-serif; background: #1e1e2f; color:#fff; text-align:center; margin:0; padding:0;}
+  header {background:#2c2c3f; padding:20px; font-size:32px; font-weight:bold;}
+  .container {padding:20px;}
+  button {background-color:#444; border:none; color:#fff; padding:12px 25px; margin:10px; font-size:18px; border-radius:10px; cursor:pointer;}
+  button:hover {background-color:#666;}
+  .question {margin-top:20px; font-size:22px;}
+  .options {margin-top:15px;}
+  .option {background-color:#fff; color:#000; padding:10px; border-radius:8px; margin:5px auto; width:80%; cursor:pointer;}
+  .option:hover {background-color:#ddd;}
+  .result {margin-top:30px; font-size:26px; font-weight:bold;}
+  footer {margin-top:50px; padding:15px; background:#2c2c3f; font-size:16px;}
+</style>
+</head>
+<body>
+<header>🇦🇱 Kuizi Shqiptar 🇦🇱</header>
+<div class="container" id="quiz-container">
+  <h2>Zgjidh kategorinë</h2>
+  <button onclick="startQuiz('politika')">Politika & Shteti Shqiptar</button>
+  <button onclick="startQuiz('historia')">Historia e Shqipërisë</button>
+  <button onclick="startQuiz('qytetet')">Qytetet e Shqipërisë</button>
+  <button onclick="startQuiz('muzike')">Muzikë & Rrep</button>
+  <button onclick="startQuiz('logjika')">Logjikë & Sfida Mendore</button>
+</div>
+<footer>Powered by <b>Endri Makashi</b> • @endrimakashii</footer>
+
+<script>
+// PYETJET: 5 kategori, secila me 20 pyetje
+const questions = {
+  politika: [
+    {q:"Kush është Presidenti aktual i Shqipërisë?", o:["Edi Rama","Bajram Begaj","Sali Berisha"], a:1},
+    {q:"Në cilin vit Shqipëria u anëtarësua në NATO?", o:["2005","2009","2013"], a:1},
+    {q:"Kuvendi i Shqipërisë ka sa deputetë?", o:["120","140","160"], a:1},
+    {q:"Kush mban postin e Kryeministrit?", o:["Edi Rama","Ilir Meta","Sali Berisha"], a:0},
+    {q:"Cili është simboli kryesor i shtetit shqiptar?", o:["Shqiponja dykrenare","Flamuri blu","Luani"], a:0},
+    {q:"Kush është kryebashkiaku i Tiranës?", o:["Erion Veliaj","Bashkim Fino","Lulzim Basha"], a:0},
+    {q:"Cila parti ka fituar zgjedhjet e fundit parlamentare?", o:["PS","PD","LSI"], a:0},
+    {q:"Kush ka qenë president i parë i Shqipërisë pas rënies së komunizmit?", o:["Sali Berisha","Rexhep Meidani","Bujar Nishani"], a:1},
+    {q:"Kuvendi i Shqipërisë ka sa komisione?", o:["12","14","16"], a:2},
+    {q:"Cila është struktura më e lartë e drejtësisë në Shqipëri?", o:["Gjykata e Lartë","Gjykata Kushtetuese","Gjykata e Apelit"], a:1},
+    {q:"Cili është numri i ministrive aktuale?", o:["12","14","16"], a:1},
+    {q:"Kush është kryetari i opozitës aktuale?", o:["Sali Berisha","Lulzim Basha","Fatmir Mediu"], a:1},
+    {q:"Sa herë ka ndryshuar kushtetuta e Shqipërisë?", o:["3","4","5"], a:2},
+    {q:"Kryeministri më i gjatë pas vitit 1991?", o:["Edi Rama","Fatos Nano","Sali Berisha"], a:1},
+    {q:"Cili institucion shqyrton ligjet përpara miratimit?", o:["Kuvendi","Presidenti","Gjykata Kushtetuese"], a:2},
+    {q:"Cila është banka qendrore e Shqipërisë?", o:["Banka Shqiptare","Banka e Shqipërisë","Banka Kombëtare"], a:1},
+    {q:"Kush emërohet nga Presidenti?", o:["Kryeministri","Ministrat","Gjykatësit e Gjykatës Kushtetuese"], a:2},
+    {q:"Cila është festa kombëtare e Shqipërisë?", o:["28 Nëntor","17 Shkurt","7 Prill"], a:0},
+    {q:"Cili është qyteti më i madh për nga popullsia?", o:["Durrës","Tiranë","Shkodër"], a:1},
+    {q:"Kush ka të drejtën të nënshkruajë marrëveshje ndërkombëtare?", o:["Kryeministri","Presidenti","Kuvendi"], a:1}
+  ],
+  historia: [
+    {q:"Në cilin vit u shpall Pavarësia e Shqipërisë?", o:["1910","1912","1914"], a:1},
+    {q:"Kush e shpalli Pavarësinë e Shqipërisë?", o:["Ismail Qemali","Skënderbeu","Ahmet Zogu"], a:0},
+    {q:"Kryeqyteti i parë pas pavarësisë?", o:["Durrës","Tiranë","Vlorë"], a:2},
+    {q:"Kur u bë Tirana kryeqytet?", o:["1920","1930","1940"], a:0},
+    {q:"Në cilin qytet u ngrit flamuri i parë?", o:["Vlorë","Krujë","Korçë"], a:0},
+    {q:"Cili ishte udhëheqësi i Lidhjes së Prizrenit?", o:["Abdyl Frashëri","Ismail Qemali","Pjetër Bogdani"], a:0},
+    {q:"Sa vite zgjati periudha osmane në Shqipëri?", o:["200","400","500"], a:1},
+    {q:"Kush ishte heroi kombëtar i shqiptarëve në shek. XV?", o:["Ismail Qemali","Skënderbeu","Ahmet Zogu"], a:1},
+    {q:"Në cilin vit Shqipëria shpalli Republikën?", o:["1925","1944","1991"], a:0},
+    {q:"Kush ishte kryeministri i parë i Shqipërisë?", o:["Ismail Qemali","Fan Noli","Ahmet Zogu"], a:0},
+    {q:"Cili qytet u bë kryeqytet i Shqipërisë pas çlirimit?", o:["Tiranë","Durrës","Shkodër"], a:0},
+    {q:"Kush luftoi kundër pushtimit italian në 1939?", o:["Enver Hoxha","Skënderbeu","Ahmet Zogu"], a:2},
+    {q:"Kur filloi Lufta e Dytë Botërore në Shqipëri?", o:["1939","1941","1943"], a:0},
+    {q:"Kush ishte udhëheqësi i Komunistëve pas luftës?", o:["Enver Hoxha","Fatos Nano","Sali Berisha"], a:0},
+    {q:"Cila është data e shpalljes së Kushtetutës së parë?", o:["1925","1912","1939"], a:1},
+    {q:"Sa herë ka ndryshuar sistemi qeverisës i Shqipërisë pas 1912?", o:["3","4","5"], a:2},
+    {q:"Kush ishte mbreti i vetëm i Shqipërisë?", o:["Ahmet Zogu","Skënderbeu","Ismail Qemali"], a:0},
+    {q:"Kur ndodhi Revolucioni i Qershorit?", o:["1924","1939","1944"], a:0},
+    {q:"Cili dokument shpalli pavarësinë?", o:["Deklarata e Vlorës","Kushtetuta e 1925","Marrëveshja e Londrës"], a:0},
+    {q:"Kush ishte kryetar i Lidhjes së Dibrës?", o:["Nexhmedin Vogli","Abdyl Frashëri","Hasan Prishtina"], a:1}
+  ],
+  qytetet: [
+    {q:"Kryeqyteti i Shqipërisë?", o:["Durrës","Tiranë","Shkodër"], a:1},
+    {q:"Qyteti i Gjirokastrës njihet si?", o:["Qytet i Gurit","Qytet i Artit","Qytet i Kalasë"], a:0},
+    {q:"Qyteti i Vlorës?", o:["Bregdetar","Malor","Lumi"], a:0},
+    {q:"Qyteti i Beratit?", o:["Qyteti i Njohur për Mjegullën","Qyteti i Njohur për Ujërat","Qyteti i Njohur për Kalatë"], a:2},
+    {q:"Qyteti më i madh pas Tiranës?", o:["Durrës","Shkodër","Fier"], a:0},
+    {q:"Qyteti i Shkodrës ndodhet pranë?", o:["Detit","Liqenit","Maleve"], a:1},
+    {q:"Qyteti i Kukësit?", o:["Verior","Jugor","Qendror"], a:0},
+    {q:"Qyteti i Korçës njihet për?", o:["Kafene dhe kulturë","Bregdetin","Male"], a:0},
+    {q:"Qyteti i Sarandës ndodhet pranë?", o:["Detit Jon","Detit Adriatik","Liqenit Shkodër"], a:0},
+    {q:"Qyteti i Durrësit është i njohur për?", o:["Portin","Kalatë","Malet"], a:0},
+    {q:"Qyteti i Fierit?", o:["Bregdetar","Malor","Qendror"], a:2},
+    {q:"Qyteti i Lezhës?", o:["Verior","Jugor","Qendror"], a:0},
+    {q:"Qyteti i Elbasanit?", o:["Qendror","Verior","Jugor"], a:0},
+    {q:"Qyteti i Pogradecit?", o:["Pranë Liqenit","Pranë Detit","Pranë Malit"], a:0},
+    {q:"Qyteti i Laçit?", o:["Verior","Qendror","Jugor"], a:1},
+    {q:"Qyteti i Krujës njihet për?", o:["Kalën e Skënderbeut","Liqenin","Plazhet"], a:0},
+    {q:"Qyteti i Tepelenës?", o:["Verior","Jugor","Qendror"], a:1},
+    {q:"Qyteti i Pukës?", o:["Verior","Qendror","Jugor"], a:0},
+    {q:"Qyteti i Shijakut?", o:["Qendror","Verior","Jugor"], a:0},
+    {q:"Qyteti i Kavajës?", o:["Qendror","Verior","Jugor"], a:0}
+  ],
+  muzike: [
+    {q:"Kush është reperi shqiptar më i njohur ndërkombëtarisht?", o:["Noizy","Stresi","Ledri Vula"], a:0},
+    {q:"Cili këngëtar fitoi Festivalin e Këngës 2022?", o:["Eneda Tarifa","Arilena Ara","Ronela Hajati"], a:1},
+    {q:"Cili është grupi më i njohur rock shqiptar?", o:["Elita 5","Troja","Makina"], a:0},
+    {q:"Cili këngëtar është i njohur për këngët patriotike?", o:["Vaçe Zela","Ledri Vula","Noizy"], a:0},
+    {q:"Cili reper është i njohur nga Tirana?", o:["Stresi","Noizy","Lyrical Son"], a:1},
+    {q:"Kënga më e njohur e Alban Skenderaj?", o:["Njëherë në jetë","Mirëmëngjes","Në Zemër"], a:0},
+    {q:"Cili reper ka bashkëpunuar me Dj Ghetto Geasy?", o:["Ledri Vula","Noizy","Mozzik"], a:1},
+    {q:"Cila këngëtare ka hitin 'Shumë Larg'?", o:["Rina","Elvana Gjata","Era Istrefi"], a:1},
+    {q:"Cili reper është i njohur me stilin trap?", o:["Stresi","Noizy","Ledri Vula"], a:2},
+    {q:"Cili është festivali më i vjetër i muzikës shqiptare?", o:["Festivali i Këngës","Kënga Magjike","Top Fest"], a:0},
+    {q:"Cila këngëtare ka këngën 'Me tana'?", o:["Elvana Gjata","Era Istrefi","Rina"], a:0},
+    {q:"Cili reper ka themeluar labelin 'Otr'?", o:["Noizy","Stresi","Ledri Vula"], a:0},
+    {q:"Cili këngëtar ka bashkëpunuar me Capital T?", o:["Elvana Gjata","Noizy","Arilena Ara"], a:1},
+    {q:"Cili reper ka këngën 'Dale', hit i madh?", o:["Mozzik","Noizy","Ledri Vula"], a:1},
+    {q:"Cila këngëtare ka këngën 'Mike'?", o:["Rina","Elvana Gjata","Era Istrefi"], a:0},
+    {q:"Cili reper ka origjinën nga Shkodra?", o:["Ledri Vula","Noizy","Stresi"], a:2},
+    {q:"Cili këngëtar ka hitin 'Nëntori'?", o:["Arilena Ara","Elvana Gjata","Rina"], a:0},
+    {q:"Cili reper ka bashkëpunim me Loredana?", o:["Mozzik","Noizy","Ledri Vula"], a:0},
+    {q:"Cila këngëtare ka këngën 'Fustani'?", o:["Elvana Gjata","Rina","Era Istrefi"], a:0},
+    {q:"Cili reper është më i njohur për freestyle?", o:["Noizy","Stresi","Ledri Vula"], a:0}
+  ],
+  logjika: [
+    {q:"Sa është 5 + 7 * 2 ?", o:["19","24","17"], a:2},
+    {q:"Nëse të kuqja = 3 dhe e gjelbra = 5, sa është e kuqja + e gjelbra?", o:["8","15","7"], a:0},
+    {q:"Gjej numrin që mungon: 2, 4, 8, 16, ?", o:["32","24","20"], a:0},
+    {q:"Cila figurë nuk i përket grupit? ⚪ 🔵 🔺 🔴", o:["⚪","🔺","🔵"], a:1},
+    {q:"Nëse dita e hënë është dita 1, e marta dita 2..., cila ditë është 10-ta?", o:["E mërkurë","E diel","E hënë"], a:1},
+    {q:"Gjej numrin që plotëson: 3, 6, 9, ?", o:["12","15","10"], a:0},
+    {q:"Në një kuti ka 5 topa të kuq, 3 të kaltër, 2 të gjelbër. Sa gjithsej?", o:["10","8","5"], a:0},
+    {q:"Cili është antonimi i fjalës 'i gjatë'?", o:["i shkurtër","i gjatë","i madh"], a:0},
+    {q:"Nëse B është 2, C është 3, sa është F?", o:["6","5","7"], a:0},
+    {q:"Gjej logjikën: A1, B2, C3, ?", o:["D4","D3","C4"], a:0},
+    {q:"Sa është 100/4 + 25 ?", o:["50","45","75"], a:0},
+    {q:"Cila figurë është më e madhe?", o:["🔺","⬛","⚪"], a:1},
+    {q:"Në një rresht janë 5 makina, secila me 4 rrota. Sa rrota gjithsej?", o:["20","15","25"], a:0},
+    {q:"Gjej figuren që mungon: ◼ ◻ ◼ ◻ ?", o:["◼","◻","⭕"], a:1},
+    {q:"Nëse 7 + ? = 15, çfarë është ?", o:["8","7","6"], a:0},
+    {q:"Gjej numrin e ardhshëm në seri: 1,1,2,3,5,8,?", o:["13","11","10"], a:0},
+    {q:"Cila është e kundërta e ngjyrës të zezë?", o:["e bardhë","e kuqe","e gjelbër"], a:0},
+    {q:"Nëse sot është e premte, dy ditë pas nesër çfarë dite është?", o:["E hënë","E diel","E shtunë"], a:1},
+    {q:"Sa është 9 * 3 - 5 ?", o:["22","27","20"], a:0},
+    {q:"Cili numër është më i madh?", o:["14","16","12"], a:1}
+  ]
+};
+
+// FUNKSIONALITETI
+let currentCategory = "";
+let currentQuestion = 0;
+let score = 0;
+
+function startQuiz(category){
+  currentCategory = category;
+  currentQuestion = 0;
+  score = 0;
+  showQuestion();
+}
+
+function showQuestion(){
+  const quizDiv = document.getElementById("quiz-container");
+  quizDiv.innerHTML = "";
+  const q = questions[currentCategory][currentQuestion];
+  const questionElem = document.createElement("div");
+  questionElem.className = "question";
+  questionElem.textContent = q.q;
+  quizDiv.appendChild(questionElem);
+
+  const optionsDiv = document.createElement("div");
+  optionsDiv.className = "options";
+  q.o.forEach((option,index)=>{
+    const btn = document.createElement("div");
+    btn.className = "option";
+    btn.textContent = option;
+    btn.onclick = ()=>checkAnswer(index);
+    optionsDiv.appendChild(btn);
+  });
+  quizDiv.appendChild(optionsDiv);
+}
+
+function checkAnswer(selected){
+  const q = questions[currentCategory][currentQuestion];
+  if(selected===q.a) score +=5;
+  currentQuestion++;
+  if(currentQuestion<questions[currentCategory].length){
+    showQuestion();
+  }else{
+    showResult();
+  }
+}
+
+function showResult(){
+  const quizDiv = document.getElementById("quiz-container");
+  quizDiv.innerHTML = "";
+  let status="";
+  if(score<=40) status="Dobët";
+  else if(score<=60) status="Mirë";
+  else if(score<=85) status="Shumë mirë";
+  else status="Shkëlqyeshëm";
+  const resultElem = document.createElement("div");
+  resultElem.className="result";
+  resultElem.innerHTML=`Pikët: ${score} / 100 <br> Vlerësimi: ${status}`;
+  quizDiv.appendChild(resultElem);
+
+  const retryBtn = document.createElement("button");
+  retryBtn.textContent="Kthehu tek kategoritë";
+  retryBtn.onclick=()=>location.reload();
+  quizDiv.appendChild(retryBtn);
+}
+</script>
+</body>
+</html>
